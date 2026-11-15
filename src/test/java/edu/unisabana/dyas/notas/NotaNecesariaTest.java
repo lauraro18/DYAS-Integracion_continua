@@ -13,7 +13,7 @@ class NotaNecesariaTest {
 
     @ParameterizedTest(name = "{0}, {1} -> necesita {2}")
     @CsvSource({
-            "3.0, 3.0, 3.0",
+            "3.0, 3.0, 3.5",  // valor equivocado a propósito: el PR debe quedar bloqueado
             "2.0, 2.0, 4.5",
             "3.5, 2.8, 2.8",
             "5.0, 5.0, 0.0"
