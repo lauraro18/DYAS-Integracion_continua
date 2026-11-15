@@ -33,6 +33,25 @@ public class CalculadoraNotas {
         return validar(definitiva, "definitiva").compareTo(NOTA_APROBATORIA) >= 0;
     }
 
+    /**
+     * Nota que se necesita en el tercer corte para llegar a 3.0.
+     * Se redondea hacia arriba a una décima: si se necesita 2.775, hay que sacar 2.8.
+     */
+    public double notaNecesariaTercerCorte(double corte1, double corte2) {
+        BigDecimal faltante = NOTA_APROBATORIA
+                .subtract(validar(corte1, "corte 1").multiply(PESO_CORTE_1))
+                .subtract(validar(corte2, "corte 2").multiply(PESO_CORTE_2));
+        BigDecimal necesaria = faltante.divide(PESO_CORTE_3, 1, RoundingMode.CEILING);
+
+        if (necesaria.compareTo(NOTA_MAXIMA) > 0) {
+            throw new IllegalStateException("Ya no es posible aprobar: se necesitaría " + necesaria);
+        }
+        if (necesaria.compareTo(NOTA_MINIMA) < 0) {
+            return 0.0;
+        }
+        return necesaria.doubleValue();
+    }
+
     private BigDecimal validar(double nota, String nombre) {
         BigDecimal valor = BigDecimal.valueOf(nota);
         if (valor.compareTo(NOTA_MINIMA) < 0 || valor.compareTo(NOTA_MAXIMA) > 0) {
